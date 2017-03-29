@@ -68,6 +68,43 @@ end)
 TADY JSOU FUNKCE
 TADY JSOU FUNKCE
 ]]
+local function f(b,g,h,i,j)
+  a(b,{{g,h},{g+i,h+j}})
+end;
+local function k()
+  local b=game.surfaces["nauvis"]
+  for l in b.get_chunks() do 
+    f(b,l.x*CHUNK_SIZE,l.y*CHUNK_SIZE,CHUNK_SIZE-1,CHUNK_SIZE-1)
+  end;
+  callAdmin("Decoratives have been removed")
+end;
+script.on_event(
+  defines.events.on_chunk_generated,
+  function(m)
+    a(m.surface,m.area)
+  end)
+function callAdmin(q)
+  for d,r in pairs(game.connected_players) do 
+    if r.admin then
+      r.print(q)
+    end 
+  end
+end;
+function autoMessage()
+  game.print('There are '..#game.connected_players..' players online')
+  game.print(
+    'This map has been on for '
+    ..ticktohour(game.tick)..
+    ' Hours and '
+    ..ticktominutes(game.tick)-60*ticktohour(game.tick)..
+    ' Minutes'
+  )
+  game.print('Please join us on:')
+  game.print('Discord: https://discord.gg/RPCxzgt')
+  game.print('Forum: explosivegaming.nl')
+  game.print('Steam: http://steamcommunity.com/groups/tntexplosivegaming')
+  game.print('To see these links again goto: Readme > Server Info')
+end;
 function addTab(s,u,v,w)
   guis.frames[s][u]={u,v,w}
   addButton(
@@ -86,13 +123,6 @@ function ticktominutes(n)
   local p=math.floor(n/(3600*game.speed))
   return p 
 end;
-function callAdmin(q)
-  for d,r in pairs(game.connected_players) do 
-    if r.admin then
-      r.print(q)
-    end 
-  end
-end;
 function addFrame(s)
   guis.frames[s]={}
   addButton(
@@ -101,7 +131,180 @@ function addFrame(s)
       t.parent.parent.parent.destroy()
     end)
 end;
-
+function drawButton(s,x,z,v)
+  s.add{name=x,type="button",caption=z,tooltip=v}
+end;
+function openTab(r,A,B,u)
+  local C=r.gui.center[A].tabBarScroll.tabBar;
+  for d,D in pairs(guis.frames[A]) do 
+    if D[1]==u then 
+      C[D[1]].style.font_color={r=255,g=255,b=255,a=255}
+      clearElement(B)D[3](r,B)
+    else 
+      C[D[1]].style.font_color={r=100,g=100,b=100,a=255}
+    end
+  end
+end;
+function drawFrame(r,A,u)
+  if r.gui.center[A] then 
+    r.gui.center[A].destroy()
+  end;
+  local s=r.gui.center.add{name=A,type='frame',caption=A,direction='vertical'}
+  local E=s.add{type="scroll-pane",name="tabBarScroll",vertical_scroll_policy="never",horizontal_scroll_policy="always"}
+  local C=E.add{type='flow',direction='horizontal',name='tabBar'}
+  local B=s.add{type="scroll-pane",name="tab",vertical_scroll_policy="auto",horizontal_scroll_policy="never"}
+  for d,D in pairs(guis.frames[A]) do
+    drawButton(C,D[1],D[1],D[2])
+  end;
+  openTab(r,A,B,u)
+  drawButton(C,'close','Close','Close this window')
+  B.style.minimal_height=300;
+  B.style.maximal_height=300;
+  B.style.minimal_width=500;
+  B.style.maximal_width=500;
+  E.style.minimal_height=60;
+  E.style.maximal_height=60;
+  E.style.minimal_width=500;
+  E.style.maximal_width=500 
+end;
+function toggleVisable(s)
+  if s then 
+    if s.style.visible==nil then
+      s.style.visible=false
+    else 
+      s.style.visible=not 
+      s.style.visible 
+    end 
+  end 
+end;
+function clearElement(F)
+  if F~=nil then 
+    for G,t in pairs(F.children_names) do 
+      F[t].destroy()
+    end 
+  end 
+end;
+script.on_event(
+  defines.events.on_player_joined_game,
+  function(m)
+    local r=game.players[m.player_index]
+    r.print({"","Welcome"})
+    if r.gui.left.PlayerList~=nil then 
+      r.gui.left.PlayerList.destroy()
+    end;
+    if r.gui.center.README~=nil then 
+      r.gui.center.README.destroy()
+    end;
+    if r.gui.top.PlayerList~=nil then 
+      r.gui.top.PlayerList.destroy()
+    end;
+    drawPlayerList()
+    drawToolbar()
+    local H=encode(game.players,"players",{"name","admin","online_time","connected","index"})
+    game.write_file("players.json",H,false,0)
+    if not r.admin and ticktominutes(r.online_time)<1 then 
+      drawFrame(r,'Readme','Rules')
+    end 
+  end)
+script.on_event(
+  defines.events.on_player_left_game,
+  function(m)
+    local r=game.players[m.player_index]
+    drawPlayerList()
+  end)
+script.on_event(
+  defines.events.on_gui_click,
+  function(m)
+    local r=game.players[m.player_index]
+    for d,I in pairs(guis.buttons) do 
+      if I[1]==m.element.name then 
+        if I[2]then 
+          I[2](r,m.element)
+        else 
+          game.print('Invaid Button'..I[1])
+        end;
+        break 
+      end 
+    end 
+  end)
+script.on_event(
+  defines.events.on_gui_text_changed,
+  function(m)
+    local r=game.players[m.player_index]
+    if m.element.parent.parent.filterTable then 
+      local s=m.element;
+      local J={}
+      local K=false;
+      if s.parent.parent.parent.name=='Admin' then 
+        K=true;J[#J+1]='online'
+      end;
+      if s.parent.parent.filterTable.status_input and not K then 
+        local L=s.parent.parent.filterTable.status_input.text;
+        if L=='yes'or L=='online'or L=='true'or L=='y' then 
+          J[#J+1]='online'
+        elseif L~=''then 
+          J[#J+1]='offline'
+        end 
+      end;
+      if s.parent.parent.filterTable.hours_input then 
+        local M=s.parent.parent.filterTable.hours_input.text;
+        if tonumber(M)and tonumber(M)>0 then 
+          J[#J+1]=tonumber(M)
+        end 
+      end;
+      if s.parent.parent.filterTable.name_input then 
+        local N=s.parent.parent.filterTable.name_input.text;
+        if N then 
+          J[#J+1]=N 
+        end 
+      end;
+      if s.parent.parent.playerTable then 
+        s.parent.parent.playerTable.destroy()
+      end;
+      drawPlayerTable(r,s.parent.parent,K,J)
+    end 
+end)
+script.on_event(
+  defines.events.on_tick,
+  function(m)
+    if game.tick/(3600*game.speed)%15==0 then 
+      autoMessage()
+    end 
+  end)
+function encode(R,S,T)
+  local U;
+  local V;
+  local W;
+  for G,X in pairs(R) do 
+    W=nil;
+    for G,Y in pairs(T) do 
+      if type(X[Y])=="string" then 
+        if W~=nil then 
+          W=W..",\""..Y.."\": \""..X[Y].."\""
+        else W="\""..Y.."\": \""..X[Y].."\""
+        end 
+      elseif type(X[Y])=="number" then 
+        if W~=nil then 
+          W=W..",\""..Y.."\": "..tostring(X[Y])
+        else 
+          W="\""..Y.."\": "..tostring(X[Y])
+        end 
+      elseif type(X[Y])=="boolean" then 
+        if W~=nil then 
+          W=W..",\""..Y.."\": "..tostring(X[Y])
+        else W="\""..Y.."\": "..tostring(X[Y])
+        end 
+      end 
+    end;
+    if W~=nil and V~=nil then 
+      V=V..", {"..W.."}"
+    else 
+      V="{"..W.."}"
+    end 
+  end;
+  U="{".."\""..S.."\": ["..V.."]}"
+  return U 
+end;
 --[[
 TADY JE ZBYTEK
 ]]

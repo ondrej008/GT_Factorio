@@ -68,6 +68,37 @@ end)
 TADY JSOU FUNKCE
 TADY JSOU FUNKCE
 ]]
+function drawToolbar()
+  for G,Z in pairs(game.connected_players) do 
+    local s=Z.gui.top;clearElement(s)
+    drawButton(
+      s,
+      "btn_toolbar_playerList",
+      "Playerlist",
+      "Adds a player list to your game."
+    )
+    drawButton(
+      s,
+      "btn_toolbar_rocket_score",
+      "Rocket score",
+      "Show the satellite launched counter if a satellite has launched."
+    )
+    drawButton(
+      s,
+      "btn_readme",
+      "Readme",
+      "Rules, Server info, How to chat, Playerlist, Adminlist."
+    )
+    if Z.tag=='[Owner]'or Z.tag=='[Developer]'or Z.tag=='[Com Mngr]' then 
+      drawButton(
+        s,
+        "btn_admin",
+        "Admin",
+        "All admin fuctions are here"
+      )
+    end 
+  end 
+end;
 function 
   drawPlayerList()
   for G,Z in pairs(game.connected_players) do 

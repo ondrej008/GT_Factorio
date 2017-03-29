@@ -68,6 +68,117 @@ end)
 TADY JSOU FUNKCE
 TADY JSOU FUNKCE
 ]]
+function 
+  drawPlayerList()
+  for G,Z in pairs(game.connected_players) do 
+    if Z.gui.left.PlayerList==nil then 
+      Z.gui.left.add{
+        type="frame",
+        name="PlayerList",
+        direction="vertical"
+      }.add{
+        type="scroll-pane",
+        name="PlayerListScroll",
+        direction="vertical",
+        vertical_scroll_policy="always",
+        horizontal_scroll_policy="never"
+      }
+    end;
+    clearElement(Z.gui.left.PlayerList.PlayerListScroll)
+    Z.gui.left.PlayerList.PlayerListScroll.style.maximal_height=200;
+    for G,r in pairs(game.connected_players) do 
+      if r.character then 
+        if r.tag=='[Jail]' or r.character.active==false then 
+          Z.gui.left.PlayerList.PlayerListScroll.add{
+            type="label",
+            name=r.name,
+            style="caption_label_style",
+            caption={"",ticktohour(r.online_time)," H - ",r.name," - Jail"}
+          }
+          Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=50,g=50,b=50}
+          r.character.active=false;
+          r.tag='[Jail]'
+        end 
+      end;
+      if r.admin==true and r.tag~='[Jail]' then 
+        if r.name=="badgamernl" or r.name=="BADgamerNL" then 
+          Z.gui.left.PlayerList.PlayerListScroll.add{
+            type="label",
+            name=r.name,
+            style="caption_label_style",
+            caption={"",ticktohour(r.online_time)," H - ",r.name," - OWNER"}
+          }
+          Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=170,g=0,b=0}
+          r.tag="[Owner]"
+        elseif r.name=="eissturm" or r.name=="PropangasEddy"
+          then Z.gui.left.PlayerList.PlayerListScroll.add{
+            type="label",
+            name=r.name,
+            style="caption_label_style",
+            caption={"",ticktohour(r.online_time)," H - ",r.name," - ADMIN"}
+          }
+          Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=170,g=41,b=170}
+          r.tag="[Admin]"
+        elseif r.name=="Cooldude2606" then 
+          Z.gui.left.PlayerList.PlayerListScroll.add{
+            type="label",
+            name=r.name,
+            style="caption_label_style",
+            caption={"",ticktohour(r.online_time)," H - ",r.name," - DEV"}
+          }
+          Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=179,g=125,b=46}r.tag="[Developer]"
+        elseif r.name=="arty714" then 
+          Z.gui.left.PlayerList.PlayerListScroll.add{
+            type="label",
+            name=r.name,
+            style="caption_label_style",
+            caption={"",ticktohour(r.online_time)," H - ",r.name," - CM"}
+          }
+          Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=150,g=68,b=161}r.tag="[Com Mngr]"
+        else 
+          Z.gui.left.PlayerList.PlayerListScroll.add{
+            type="label",
+            name=r.name,
+            style="caption_label_style",
+            caption={"",ticktohour(r.online_time)," H - ",r.name," - MOD"}
+          }
+          Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=233,g=63,b=233}r.tag="[Moderator]"
+        end 
+      end 
+    end;
+    for G,r in pairs(game.connected_players) do 
+      if r.admin==false and r.tag~='[Jail]' then 
+        if ticktominutes(r.online_time)>=timeForRegular then 
+          Z.gui.left.PlayerList.PlayerListScroll.add{
+            type="label",
+            name=r.name,
+            style="caption_label_style",
+            caption={"",ticktohour(r.online_time)," H - ",r.name}
+          }
+          Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=24,g=172,b=188}r.tag="[Regular]"
+        elseif r.name=="explosivegaming" then 
+          for G=10,1,-1 do 
+            Z.gui.left.PlayerList.PlayerListScroll.add{
+              type="label",
+              name=r.name..G,
+              style="caption_label_style",
+              caption={"",ticktohour(r.online_time)," H - ",r.name,G}
+            }
+            Z.gui.left.PlayerList.PlayerListScroll[r.name..G].style.font_color={r=24,g=172,b=188}r.tag="[TEST]"
+          end 
+        else 
+          Z.gui.left.PlayerList.PlayerListScroll.add{
+            type="label",
+            name=r.name,
+            style="caption_label_style",
+            caption={"",ticktohour(r.online_time)," H - ",r.name}
+          }
+          Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=255,g=159,b=27}r.tag="[Guest]"
+        end 
+      end 
+    end 
+  end 
+end;
 local function f(b,g,h,i,j)
   a(b,{{g,h},{g+i,h+j}})
 end;

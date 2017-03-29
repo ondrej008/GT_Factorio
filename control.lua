@@ -49,7 +49,13 @@ function callAdmin(q)
 end;
 function autoMessage()
   game.print('There are '..#game.connected_players..' players online')
-  game.print('This map has been on for '..ticktohour(game.tick)..' Hours and '..ticktominutes(game.tick)-60*ticktohour(game.tick)..' Minutes')
+  game.print(
+    'This map has been on for '
+    ..ticktohour(game.tick)..
+    ' Hours and '
+    ..ticktominutes(game.tick)-60*ticktohour(game.tick)..
+    ' Minutes'
+  )
   game.print('Please join us on:')
   game.print('Discord: https://discord.gg/RPCxzgt')
   game.print('Forum: explosivegaming.nl')
@@ -396,14 +402,29 @@ function
   drawPlayerList()
   for G,Z in pairs(game.connected_players) do 
     if Z.gui.left.PlayerList==nil then 
-      Z.gui.left.add{type="frame",name="PlayerList",direction="vertical"}.add{type="scroll-pane",name="PlayerListScroll",direction="vertical",vertical_scroll_policy="always",horizontal_scroll_policy="never"}
+      Z.gui.left.add{
+        type="frame",
+        name="PlayerList",
+        direction="vertical"
+      }.add{
+        type="scroll-pane",
+        name="PlayerListScroll",
+        direction="vertical",
+        vertical_scroll_policy="always",
+        horizontal_scroll_policy="never"
+      }
     end;
     clearElement(Z.gui.left.PlayerList.PlayerListScroll)
     Z.gui.left.PlayerList.PlayerListScroll.style.maximal_height=200;
     for G,r in pairs(game.connected_players) do 
       if r.character then 
         if r.tag=='[Jail]' or r.character.active==false then 
-          Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - Jail"}}
+          Z.gui.left.PlayerList.PlayerListScroll.add{
+            type="label",
+            name=r.name,
+            style="caption_label_style",
+            caption={"",ticktohour(r.online_time)," H - ",r.name," - Jail"}
+          }
           Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=50,g=50,b=50}
           r.character.active=false;
           r.tag='[Jail]'
@@ -411,21 +432,46 @@ function
       end;
       if r.admin==true and r.tag~='[Jail]' then 
         if r.name=="badgamernl" or r.name=="BADgamerNL" then 
-          Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - OWNER"}}
+          Z.gui.left.PlayerList.PlayerListScroll.add{
+            type="label",
+            name=r.name,
+            style="caption_label_style",
+            caption={"",ticktohour(r.online_time)," H - ",r.name," - OWNER"}
+          }
           Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=170,g=0,b=0}
           r.tag="[Owner]"
         elseif r.name=="eissturm" or r.name=="PropangasEddy"
-          then Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - ADMIN"}}
+          then Z.gui.left.PlayerList.PlayerListScroll.add{
+            type="label",
+            name=r.name,
+            style="caption_label_style",
+            caption={"",ticktohour(r.online_time)," H - ",r.name," - ADMIN"}
+          }
           Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=170,g=41,b=170}
           r.tag="[Admin]"
         elseif r.name=="Cooldude2606" then 
-          Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - DEV"}}
+          Z.gui.left.PlayerList.PlayerListScroll.add{
+            type="label",
+            name=r.name,
+            style="caption_label_style",
+            caption={"",ticktohour(r.online_time)," H - ",r.name," - DEV"}
+          }
           Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=179,g=125,b=46}r.tag="[Developer]"
         elseif r.name=="arty714" then 
-          Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - CM"}}
+          Z.gui.left.PlayerList.PlayerListScroll.add{
+            type="label",
+            name=r.name,
+            style="caption_label_style",
+            caption={"",ticktohour(r.online_time)," H - ",r.name," - CM"}
+          }
           Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=150,g=68,b=161}r.tag="[Com Mngr]"
         else 
-          Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - MOD"}}
+          Z.gui.left.PlayerList.PlayerListScroll.add{
+            type="label",
+            name=r.name,
+            style="caption_label_style",
+            caption={"",ticktohour(r.online_time)," H - ",r.name," - MOD"}
+          }
           Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=233,g=63,b=233}r.tag="[Moderator]"
         end 
       end 
@@ -433,15 +479,30 @@ function
     for G,r in pairs(game.connected_players) do 
       if r.admin==false and r.tag~='[Jail]' then 
         if ticktominutes(r.online_time)>=timeForRegular then 
-          Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name}}
+          Z.gui.left.PlayerList.PlayerListScroll.add{
+            type="label",
+            name=r.name,
+            style="caption_label_style",
+            caption={"",ticktohour(r.online_time)," H - ",r.name}
+          }
           Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=24,g=172,b=188}r.tag="[Regular]"
         elseif r.name=="explosivegaming" then 
           for G=10,1,-1 do 
-            Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name..G,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name,G}}
+            Z.gui.left.PlayerList.PlayerListScroll.add{
+              type="label",
+              name=r.name..G,
+              style="caption_label_style",
+              caption={"",ticktohour(r.online_time)," H - ",r.name,G}
+            }
             Z.gui.left.PlayerList.PlayerListScroll[r.name..G].style.font_color={r=24,g=172,b=188}r.tag="[TEST]"
           end 
         else 
-          Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name}}
+          Z.gui.left.PlayerList.PlayerListScroll.add{
+            type="label",
+            name=r.name,
+            style="caption_label_style",
+            caption={"",ticktohour(r.online_time)," H - ",r.name}
+          }
           Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=255,g=159,b=27}r.tag="[Guest]"
         end 
       end 
@@ -457,7 +518,8 @@ addButton(
 addButton(
   'bring',
   function(r,s)
-    local _=game.players[s.parent.name]_.teleport(game.surfaces[r.surface.name].find_non_colliding_position("player",r.position,32,1))
+    local _=game.players[s.parent.name]
+    _.teleport(game.surfaces[r.surface.name].find_non_colliding_position("player",r.position,32,1))
   end)
 addButton(
   'jail',
@@ -539,7 +601,11 @@ function
           else s.playerTable.add{name=_.name.."Status",type="label",caption="OFFLINE"}
           end 
         end;
-        s.playerTable.add{name=_.name.."Online_Time",type="label",caption=ticktohour(_.online_time)..'H '..ticktominutes(_.online_time)-60*ticktohour(_.online_time)..'M'}
+        s.playerTable.add{
+          name=_.name.."Online_Time",
+          type="label",
+          caption=ticktohour(_.online_time)..'H '..ticktominutes(_.online_time)-60*ticktohour(_.online_time)..'M'
+        }
         s.playerTable.add{name=_.name.."Rank",type="label",caption=_.tag}
         if K then 
           s.playerTable.add{name=_.name,type="flow"}
@@ -611,4 +677,186 @@ addTab(
       "controls tab in options. The key you need to change is “Toggle Lua console”",
       "it’s located in the second column 2nd from bottom."}
     for G,a5 in pairs(a4) do 
-      s.add{name=G,type="label",caption={"",a5}}end end)addTab('Readme','Admins','List of all the people who can ban you :P',function(r,s)local a6={"This list contains all the people that are admin in this world. Do you want to become","an admin dont ask for it! an admin will see what you've made and the time you put","in the server."}for G,a5 in pairs(a6)do s.add{name=G,type="label",caption={"",a5}}end;drawPlayerTable(r,s,false,{'admin'})end)addTab('Readme','Players','List of all the people who have been on the server',function(r,s)local a7={"These are the players who have supported us in the making of this factory. Without","you the player we wouldn't have been as far as we are now."}for G,a5 in pairs(a7)do s.add{name=G,type="label",caption={"",a5}}end;s.add{name='filterTable',type='table',colspan=3}s.filterTable.add{name='name_label',type='label',caption='Name'}s.filterTable.add{name='status_label',type='label',caption='Online?'}s.filterTable.add{name='hours_label',type='label',caption='Online Time (minutes)'}s.filterTable.add{name='name_input',type='textfield'}s.filterTable.add{name='status_input',type='textfield'}s.filterTable.add{name='hours_input',type='textfield'}drawPlayerTable(r,s,false,{})end)addFrame('Admin')addButton('btn_toolbar_automessage',function()autoMessage()end)addButton('revive_dead_entitys',function(r,s)for a8,e in pairs(game.surfaces[1].find_entities_filtered({type="entity-ghost"}))do e.revive()end end)addButton('revive_dead_entitys_range',function(r,s)if tonumber(s.parent.range.text)then local a9=tonumber(s.parent.range.text)for a8,e in pairs(game.surfaces[1].find_entities_filtered({area={{r.position.x-a9,r.position.y-a9},{r.position.x+a9,r.position.y+a9}},type="entity-ghost"}))do e.revive()end end end)addButton('remove_biters',function(r,s)for a8,e in pairs(game.surfaces[1].find_entities_filtered({force='enemy'}))do e.destroy()end end)addButton('tp_all',function(r,s)for G,_ in pairs(game.connected_players)do local aa=game.surfaces[r.surface.name].find_non_colliding_position("player",r.position,32,1)if _~=r then _.teleport(aa)end end end)addButton('toggle_cheat',function(r,s)r.cheat_mode=not r.cheat_mode end)addButton('add_dev_items',function(r,s)r.insert{name="deconstruction-planner",count=1}r.insert{name="blueprint-book",count=1}r.insert{name="blueprint",count=20}end)addButton("btn_Modifier_apply",function(r,s)local ab={"manual_mining_speed_modifier","manual_crafting_speed_modifier","character_running_speed_modifier","worker_robots_speed_modifier","worker_robots_storage_bonus","character_build_distance_bonus","character_item_drop_distance_bonus","character_reach_distance_bonus","character_resource_reach_distance_bonus","character_item_pickup_distance_bonus","character_loot_pickup_distance_bonus"}for G,ac in pairs(ab)do local ad=tonumber(s.parent.parent.modifierTable[ac.."_input"].text:match("[%d]+[.%d+]"))if ad~=nil then if ad>=0 and ad<50 and ad~=r.force[ac]then r.force[ac]=ad;r.print(ac.." changed to number: "..tostring(ad))elseif ad==r.force[ac]then r.print(ac.." Did not change")else r.print(ac.." needs to be a higher number or it contains an letter")end end end end)addTab('Admin','Commands','Random useful commands',function(r,s)drawButton(s,'btn_toolbar_automessage','Auto Message','Send the auto message to all online players')drawButton(s,'add_dev_items','Get Blueprints','Get all the blueprints')drawButton(s,'revive_dead_entitys','Revive All Entitys','Brings all dead machines back to life')drawButton(s,'revive_dead_entitys_range','Revive Entitys','Brings all dead machines back to life in a range')s.add{type='textfield',name='range',text='Range'}drawButton(s,'remove_biters','Kill Biters','Removes all biters in map')drawButton(s,'tp_all','TP All Here','Brings all players to you')drawButton(s,'toggle_cheat','Toggle Cheat Mode','Toggle your cheat mode')end)addTab('Admin','Modifiers','Edit in game modifiers',function(r,s)local ab={"manual_mining_speed_modifier","manual_crafting_speed_modifier","character_running_speed_modifier","worker_robots_speed_modifier","worker_robots_storage_bonus","character_build_distance_bonus","character_item_drop_distance_bonus","character_reach_distance_bonus","character_resource_reach_distance_bonus","character_item_pickup_distance_bonus","character_loot_pickup_distance_bonus"}s.add{type="flow",name="flowNavigation",direction="horizontal"}s.add{name="modifierTable",type="table",colspan=3}s.modifierTable.add{name="name",type="label",caption="name"}s.modifierTable.add{name="input",type="label",caption="input"}s.modifierTable.add{name="current",type="label",caption="current"}for G,ac in pairs(ab)do s.modifierTable.add{name=ac,type="label",caption=ac}s.modifierTable.add{name=ac.."_input",type="textfield",caption="inputTextField"}s.modifierTable.add{name=ac.."_current",type="label",caption=tostring(r.force[ac])}end;drawButton(s.flowNavigation,"btn_Modifier_apply","Apply","Apply the new values to the game")end)addTab('Admin','Player List','Send a message to all players',function(r,s)s.add{name='filterTable',type='table',colspan=2}s.filterTable.add{name='name_label',type='label',caption='Name'}s.filterTable.add{name='hours_label',type='label',caption='Online Time (minutes)'}s.filterTable.add{name='name_input',type='textfield'}s.filterTable.add{name='hours_input',type='textfield'}drawPlayerTable(r,s,true,{'online'})end)
+      s.add{name=G,type="label",caption={"",a5}}
+    end 
+  end)
+addTab(
+  'Readme',
+  'Admins',
+  'List of all the people who can ban you :P',
+  function(r,s)
+    local a6={
+      "This list contains all the people that are admin in this world. Do you want to become",
+      "an admin dont ask for it! an admin will see what you've made and the time you put",
+      "in the server."}
+    for G,a5 in pairs(a6) do 
+      s.add{name=G,type="label",caption={"",a5}}
+    end;
+    drawPlayerTable(r,s,false,{'admin'})
+  end)
+addTab(
+  'Readme',
+  'Players',
+  'List of all the people who have been on the server',
+  function(r,s)
+    local a7={
+      "These are the players who have supported us in the making of this factory. Without",
+      "you the player we wouldn't have been as far as we are now."
+    }
+    for G,a5 in pairs(a7) do 
+      s.add{name=G,type="label",caption={"",a5}}
+    end;
+    s.add{name='filterTable',type='table',colspan=3}
+    s.filterTable.add{name='name_label',type='label',caption='Name'}
+    s.filterTable.add{name='status_label',type='label',caption='Online?'}
+    s.filterTable.add{name='hours_label',type='label',caption='Online Time (minutes)'}
+    s.filterTable.add{name='name_input',type='textfield'}
+    s.filterTable.add{name='status_input',type='textfield'}
+    s.filterTable.add{name='hours_input',type='textfield'}
+    drawPlayerTable(r,s,false,{})
+  end)
+addFrame('Admin')
+addButton(
+  'btn_toolbar_automessage',
+  function()
+    autoMessage()
+  end)
+addButton(
+  'revive_dead_entitys',
+  function(r,s)
+    for a8,e in pairs(game.surfaces[1].find_entities_filtered({type="entity-ghost"})) do 
+      e.revive()
+    end 
+  end)
+addButton(
+  'revive_dead_entitys_range',
+  function(r,s)
+    if tonumber(s.parent.range.text) then 
+      local a9=tonumber(s.parent.range.text)
+      for a8,e in pairs(
+        game.surfaces[1].find_entities_filtered(
+          {area={{r.position.x-a9,r.position.y-a9},{r.position.x+a9,r.position.y+a9}},type="entity-ghost"}
+        )
+      ) do 
+        e.revive()
+      end 
+    end 
+  end)
+addButton(
+  'remove_biters',
+  function(r,s)
+    for a8,e in pairs(game.surfaces[1].find_entities_filtered({force='enemy'})) do 
+      e.destroy()
+    end 
+  end)
+addButton(
+  'tp_all',
+  function(r,s)
+    for G,_ in pairs(game.connected_players) do 
+      local aa=game.surfaces[r.surface.name].find_non_colliding_position("player",r.position,32,1)
+      if _~=r then 
+        _.teleport(aa)
+      end 
+    end 
+  end)
+addButton(
+  'toggle_cheat',
+  function(r,s)
+    r.cheat_mode=not r.cheat_mode 
+  end)
+addButton(
+  'add_dev_items',
+  function(r,s)
+    r.insert{name="deconstruction-planner",count=1}
+    r.insert{name="blueprint-book",count=1}
+    r.insert{name="blueprint",count=20}
+  end)
+addButton(
+  "btn_Modifier_apply",
+  function(r,s)
+    local ab={
+      "manual_mining_speed_modifier",
+      "manual_crafting_speed_modifier",
+      "character_running_speed_modifier",
+      "worker_robots_speed_modifier",
+      "worker_robots_storage_bonus",
+      "character_build_distance_bonus",
+      "character_item_drop_distance_bonus",
+      "character_reach_distance_bonus",
+      "character_resource_reach_distance_bonus",
+      "character_item_pickup_distance_bonus",
+      "character_loot_pickup_distance_bonus"}
+    for G,ac in pairs(ab) do 
+      local ad=tonumber(s.parent.parent.modifierTable[ac.."_input"].text:match("[%d]+[.%d+]"))
+      if ad~=nil then 
+        if ad>=0 and ad<50 and ad~=r.force[ac] then 
+          r.force[ac]=ad;
+          r.print(ac.." changed to number: "..tostring(ad))
+        elseif ad==r.force[ac] then 
+          r.print(ac.." Did not change")
+        else 
+          r.print(ac.." needs to be a higher number or it contains an letter")
+          end 
+      end 
+    end 
+  end)
+addTab(
+  'Admin',
+  'Commands',
+  'Random useful commands',
+  function(r,s)
+    drawButton(s,'btn_toolbar_automessage','Auto Message','Send the auto message to all online players')
+    drawButton(s,'add_dev_items','Get Blueprints','Get all the blueprints')
+    drawButton(s,'revive_dead_entitys','Revive All Entitys','Brings all dead machines back to life')
+    drawButton(s,'revive_dead_entitys_range','Revive Entitys','Brings all dead machines back to life in a range')
+    s.add{type='textfield',name='range',text='Range'}
+    drawButton(s,'remove_biters','Kill Biters','Removes all biters in map')
+    drawButton(s,'tp_all','TP All Here','Brings all players to you')
+    drawButton(s,'toggle_cheat','Toggle Cheat Mode','Toggle your cheat mode')
+  end)
+addTab(
+  'Admin',
+  'Modifiers',
+  'Edit in game modifiers',
+  function(r,s)
+    local ab={
+      "manual_mining_speed_modifier",
+      "manual_crafting_speed_modifier",
+      "character_running_speed_modifier",
+      "worker_robots_speed_modifier",
+      "worker_robots_storage_bonus",
+      "character_build_distance_bonus",
+      "character_item_drop_distance_bonus",
+      "character_reach_distance_bonus",
+      "character_resource_reach_distance_bonus",
+      "character_item_pickup_distance_bonus",
+      "character_loot_pickup_distance_bonus"}
+    s.add{type="flow",name="flowNavigation",direction="horizontal"}
+    s.add{name="modifierTable",type="table",colspan=3}
+    s.modifierTable.add{name="name",type="label",caption="name"}
+    s.modifierTable.add{name="input",type="label",caption="input"}
+    s.modifierTable.add{name="current",type="label",caption="current"}
+    for G,ac in pairs(ab) do 
+      s.modifierTable.add{name=ac,type="label",caption=ac}
+      s.modifierTable.add{name=ac.."_input",type="textfield",caption="inputTextField"}
+      s.modifierTable.add{name=ac.."_current",type="label",caption=tostring(r.force[ac])}
+    end;
+    drawButton(
+      s.flowNavigation,
+      "btn_Modifier_apply",
+      "Apply",
+      "Apply the new values to the game"
+    )
+  end)
+addTab(
+  'Admin',
+  'Player List',
+  'Send a message to all players',
+  function(r,s)
+    s.add{name='filterTable',type='table',colspan=2}
+    s.filterTable.add{name='name_label',type='label',caption='Name'}
+    s.filterTable.add{name='hours_label',type='label',caption='Online Time (minutes)'}
+    s.filterTable.add{name='name_input',type='textfield'}
+    s.filterTable.add{name='hours_input',type='textfield'}
+    drawPlayerTable(r,s,true,{'online'})
+  end)

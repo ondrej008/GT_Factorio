@@ -344,4 +344,271 @@ addButton(
   function(r)
     toggleVisable(r.gui.left.rocket_score)
   end)
-addButton("btn_readme",function(r)if r.gui.center.Readme then r.gui.center.Readme.destroy()else drawFrame(r,'Readme','Rules')end end)addButton("btn_admin",function(r)if r.gui.center.Admin then r.gui.center.Admin.destroy()else drawFrame(r,'Admin','Modifiers')end end)function drawToolbar()for G,Z in pairs(game.connected_players)do local s=Z.gui.top;clearElement(s)drawButton(s,"btn_toolbar_playerList","Playerlist","Adds a player list to your game.")drawButton(s,"btn_toolbar_rocket_score","Rocket score","Show the satellite launched counter if a satellite has launched.")drawButton(s,"btn_readme","Readme","Rules, Server info, How to chat, Playerlist, Adminlist.")if Z.tag=='[Owner]'or Z.tag=='[Developer]'or Z.tag=='[Com Mngr]'then drawButton(s,"btn_admin","Admin","All admin fuctions are here")end end end;function drawPlayerList()for G,Z in pairs(game.connected_players)do if Z.gui.left.PlayerList==nil then Z.gui.left.add{type="frame",name="PlayerList",direction="vertical"}.add{type="scroll-pane",name="PlayerListScroll",direction="vertical",vertical_scroll_policy="always",horizontal_scroll_policy="never"}end;clearElement(Z.gui.left.PlayerList.PlayerListScroll)Z.gui.left.PlayerList.PlayerListScroll.style.maximal_height=200;for G,r in pairs(game.connected_players)do if r.character then if r.tag=='[Jail]'or r.character.active==false then Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - Jail"}}Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=50,g=50,b=50}r.character.active=false;r.tag='[Jail]'end end;if r.admin==true and r.tag~='[Jail]'then if r.name=="badgamernl"or r.name=="BADgamerNL"then Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - OWNER"}}Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=170,g=0,b=0}r.tag="[Owner]"elseif r.name=="eissturm"or r.name=="PropangasEddy"then Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - ADMIN"}}Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=170,g=41,b=170}r.tag="[Admin]"elseif r.name=="Cooldude2606"then Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - DEV"}}Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=179,g=125,b=46}r.tag="[Developer]"elseif r.name=="arty714"then Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - CM"}}Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=150,g=68,b=161}r.tag="[Com Mngr]"else Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - MOD"}}Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=233,g=63,b=233}r.tag="[Moderator]"end end end;for G,r in pairs(game.connected_players)do if r.admin==false and r.tag~='[Jail]'then if ticktominutes(r.online_time)>=timeForRegular then Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name}}Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=24,g=172,b=188}r.tag="[Regular]"elseif r.name=="explosivegaming"then for G=10,1,-1 do Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name..G,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name,G}}Z.gui.left.PlayerList.PlayerListScroll[r.name..G].style.font_color={r=24,g=172,b=188}r.tag="[TEST]"end else Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name}}Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=255,g=159,b=27}r.tag="[Guest]"end end end end end;addButton('goto',function(r,s)local _=game.players[s.parent.name]r.teleport(game.surfaces[_.surface.name].find_non_colliding_position("player",_.position,32,1))end)addButton('bring',function(r,s)local _=game.players[s.parent.name]_.teleport(game.surfaces[r.surface.name].find_non_colliding_position("player",r.position,32,1))end)addButton('jail',function(r,s)local _=game.players[s.parent.name]if _.character then if _.character.active then _.character.active=false;_.tag='[Jail]'drawPlayerList()else _.character.active=true;_.tag='[Guest]'drawPlayerList()end end end)addButton('kill',function(r,s)local _=game.players[s.parent.name]if _.character then _.character.die()end end)function drawPlayerTable(r,s,K,J)s.add{name='playerTable',type="table",colspan=5}s.playerTable.style.minimal_width=500;s.playerTable.style.maximal_width=500;s.playerTable.style.horizontal_spacing=10;s.playerTable.add{name="id",type="label",caption="Id		"}s.playerTable.add{name="name",type="label",caption="Name		"}if not K then s.playerTable.add{name="status",type="label",caption="Status		"}end;s.playerTable.add{name="online_time",type="label",caption="Online Time	"}s.playerTable.add{name="rank",type="label",caption="Rank	"}if K then s.playerTable.add{name="commands",type="label",caption="Commands"}end;for G,_ in pairs(game.players)do local a0=true;for d,a1 in pairs(J)do if a1=='admin'then if _.admin==false then a0=false;break end elseif a1=='online'then if _.connected==false then a0=false;break end elseif a1=='offline'then if _.connected==true then a0=false;break end elseif type(a1)=='number'then if a1>ticktominutes(_.online_time)then a0=false;break end elseif type(a1)=='string'then if _.name:lower():find(a1:lower())==nil then a0=false;break end end end;if a0==true and r.name~=_.name then if s.playerTable[_.name]==nil then s.playerTable.add{name=G.."id",type="label",caption=G}s.playerTable.add{name=_.name..'_name',type="label",caption=_.name}if not K then if _.connected==true then s.playerTable.add{name=_.name.."Status",type="label",caption="ONLINE"}else s.playerTable.add{name=_.name.."Status",type="label",caption="OFFLINE"}end end;s.playerTable.add{name=_.name.."Online_Time",type="label",caption=ticktohour(_.online_time)..'H '..ticktominutes(_.online_time)-60*ticktohour(_.online_time)..'M'}s.playerTable.add{name=_.name.."Rank",type="label",caption=_.tag}if K then s.playerTable.add{name=_.name,type="flow"}drawButton(s.playerTable[_.name],'goto','Tp','Goto to the players location')drawButton(s.playerTable[_.name],'bring','Br','Bring a player to your location')if _.tag=='[Owner]'or _.tag=='[Developer]'or _.tag=='[Com Mngr]'then else drawButton(s.playerTable[_.name],'jail','Ja','Jail/Unjail a player')drawButton(s.playerTable[_.name],'kill','Ki','Kill this player')end end end end end end;addFrame('Readme')addTab('Readme','Rules','The rules of the server',function(r,s)local a2={"Hacking/cheating, exploiting and abusing bugs is not allowed.","Do not disrespect any player in the server (This includes staff).","Do not spam, this includes stuff such as chat spam, item spam, chest spam etc.","Do not laydown concrete with bots without permission.","Do not use active provider chests without permission.","Do not remove/move major parts of the factory without permission.","Do not walk in a random direction for no reason(to save map size).","Do not remove stuff just because you don't like it, tell people first.","Do not make train roundabouts.","Trains are Left Hand Drive (LHD) only.","Do not complain about lag, low fps and low ups or other things like that.","Do not ask for rank.","Use common sense and what an admin says goes."}for G,a3 in pairs(a2)do s.add{name=G,type="label",caption={"",G,". ",a3}}end end)addTab('Readme','Server Info','Info about the server',function(r,s)s.add{name=1,type="label",caption={"","Discord voice and chat server:"}}s.add{name=2,type='textfield',text='https://discord.gg/RPCxzgt'}.style.minimal_width=400;s.add{name=3,type="label",caption={"","Our forum:"}}s.add{name=4,type='textfield',text='https://explosivegaming.nl'}.style.minimal_width=400;s.add{name=5,type="label",caption={"","Steam:"}}s.add{name=6,type='textfield',text='http://steamcommunity.com/groups/tntexplosivegaming'}.style.minimal_width=400 end)addTab('Readme','How to chat','Just in case you dont know how to chat',function(r,s)local a4={"Chatting for new players can be difficult because it’s different than other games!","It’s very simple, the button you need to press is the “GRAVE/TILDE key”","it’s located under the “ESC key”. If you would like to change the key go to your","controls tab in options. The key you need to change is “Toggle Lua console”","it’s located in the second column 2nd from bottom."}for G,a5 in pairs(a4)do s.add{name=G,type="label",caption={"",a5}}end end)addTab('Readme','Admins','List of all the people who can ban you :P',function(r,s)local a6={"This list contains all the people that are admin in this world. Do you want to become","an admin dont ask for it! an admin will see what you've made and the time you put","in the server."}for G,a5 in pairs(a6)do s.add{name=G,type="label",caption={"",a5}}end;drawPlayerTable(r,s,false,{'admin'})end)addTab('Readme','Players','List of all the people who have been on the server',function(r,s)local a7={"These are the players who have supported us in the making of this factory. Without","you the player we wouldn't have been as far as we are now."}for G,a5 in pairs(a7)do s.add{name=G,type="label",caption={"",a5}}end;s.add{name='filterTable',type='table',colspan=3}s.filterTable.add{name='name_label',type='label',caption='Name'}s.filterTable.add{name='status_label',type='label',caption='Online?'}s.filterTable.add{name='hours_label',type='label',caption='Online Time (minutes)'}s.filterTable.add{name='name_input',type='textfield'}s.filterTable.add{name='status_input',type='textfield'}s.filterTable.add{name='hours_input',type='textfield'}drawPlayerTable(r,s,false,{})end)addFrame('Admin')addButton('btn_toolbar_automessage',function()autoMessage()end)addButton('revive_dead_entitys',function(r,s)for a8,e in pairs(game.surfaces[1].find_entities_filtered({type="entity-ghost"}))do e.revive()end end)addButton('revive_dead_entitys_range',function(r,s)if tonumber(s.parent.range.text)then local a9=tonumber(s.parent.range.text)for a8,e in pairs(game.surfaces[1].find_entities_filtered({area={{r.position.x-a9,r.position.y-a9},{r.position.x+a9,r.position.y+a9}},type="entity-ghost"}))do e.revive()end end end)addButton('remove_biters',function(r,s)for a8,e in pairs(game.surfaces[1].find_entities_filtered({force='enemy'}))do e.destroy()end end)addButton('tp_all',function(r,s)for G,_ in pairs(game.connected_players)do local aa=game.surfaces[r.surface.name].find_non_colliding_position("player",r.position,32,1)if _~=r then _.teleport(aa)end end end)addButton('toggle_cheat',function(r,s)r.cheat_mode=not r.cheat_mode end)addButton('add_dev_items',function(r,s)r.insert{name="deconstruction-planner",count=1}r.insert{name="blueprint-book",count=1}r.insert{name="blueprint",count=20}end)addButton("btn_Modifier_apply",function(r,s)local ab={"manual_mining_speed_modifier","manual_crafting_speed_modifier","character_running_speed_modifier","worker_robots_speed_modifier","worker_robots_storage_bonus","character_build_distance_bonus","character_item_drop_distance_bonus","character_reach_distance_bonus","character_resource_reach_distance_bonus","character_item_pickup_distance_bonus","character_loot_pickup_distance_bonus"}for G,ac in pairs(ab)do local ad=tonumber(s.parent.parent.modifierTable[ac.."_input"].text:match("[%d]+[.%d+]"))if ad~=nil then if ad>=0 and ad<50 and ad~=r.force[ac]then r.force[ac]=ad;r.print(ac.." changed to number: "..tostring(ad))elseif ad==r.force[ac]then r.print(ac.." Did not change")else r.print(ac.." needs to be a higher number or it contains an letter")end end end end)addTab('Admin','Commands','Random useful commands',function(r,s)drawButton(s,'btn_toolbar_automessage','Auto Message','Send the auto message to all online players')drawButton(s,'add_dev_items','Get Blueprints','Get all the blueprints')drawButton(s,'revive_dead_entitys','Revive All Entitys','Brings all dead machines back to life')drawButton(s,'revive_dead_entitys_range','Revive Entitys','Brings all dead machines back to life in a range')s.add{type='textfield',name='range',text='Range'}drawButton(s,'remove_biters','Kill Biters','Removes all biters in map')drawButton(s,'tp_all','TP All Here','Brings all players to you')drawButton(s,'toggle_cheat','Toggle Cheat Mode','Toggle your cheat mode')end)addTab('Admin','Modifiers','Edit in game modifiers',function(r,s)local ab={"manual_mining_speed_modifier","manual_crafting_speed_modifier","character_running_speed_modifier","worker_robots_speed_modifier","worker_robots_storage_bonus","character_build_distance_bonus","character_item_drop_distance_bonus","character_reach_distance_bonus","character_resource_reach_distance_bonus","character_item_pickup_distance_bonus","character_loot_pickup_distance_bonus"}s.add{type="flow",name="flowNavigation",direction="horizontal"}s.add{name="modifierTable",type="table",colspan=3}s.modifierTable.add{name="name",type="label",caption="name"}s.modifierTable.add{name="input",type="label",caption="input"}s.modifierTable.add{name="current",type="label",caption="current"}for G,ac in pairs(ab)do s.modifierTable.add{name=ac,type="label",caption=ac}s.modifierTable.add{name=ac.."_input",type="textfield",caption="inputTextField"}s.modifierTable.add{name=ac.."_current",type="label",caption=tostring(r.force[ac])}end;drawButton(s.flowNavigation,"btn_Modifier_apply","Apply","Apply the new values to the game")end)addTab('Admin','Player List','Send a message to all players',function(r,s)s.add{name='filterTable',type='table',colspan=2}s.filterTable.add{name='name_label',type='label',caption='Name'}s.filterTable.add{name='hours_label',type='label',caption='Online Time (minutes)'}s.filterTable.add{name='name_input',type='textfield'}s.filterTable.add{name='hours_input',type='textfield'}drawPlayerTable(r,s,true,{'online'})end)
+addButton(
+  "btn_readme",
+  function(r)
+    if r.gui.center.Readme then 
+      r.gui.center.Readme.destroy()
+    else drawFrame(r,'Readme','Rules')
+    end 
+  end)
+addButton(
+  "btn_admin",
+  function(r)
+    if r.gui.center.Admin then 
+      r.gui.center.Admin.destroy()
+    else 
+      drawFrame(r,'Admin','Modifiers')
+    end 
+  end)
+function drawToolbar()
+  for G,Z in pairs(game.connected_players) do 
+    local s=Z.gui.top;clearElement(s)
+    drawButton(
+      s,
+      "btn_toolbar_playerList",
+      "Playerlist",
+      "Adds a player list to your game."
+    )
+    drawButton(
+      s,
+      "btn_toolbar_rocket_score",
+      "Rocket score",
+      "Show the satellite launched counter if a satellite has launched."
+    )
+    drawButton(
+      s,
+      "btn_readme",
+      "Readme",
+      "Rules, Server info, How to chat, Playerlist, Adminlist."
+    )
+    if Z.tag=='[Owner]'or Z.tag=='[Developer]'or Z.tag=='[Com Mngr]' then 
+      drawButton(
+        s,
+        "btn_admin",
+        "Admin",
+        "All admin fuctions are here"
+      )
+    end 
+  end 
+end;
+function 
+  drawPlayerList()
+  for G,Z in pairs(game.connected_players) do 
+    if Z.gui.left.PlayerList==nil then 
+      Z.gui.left.add{type="frame",name="PlayerList",direction="vertical"}.add{type="scroll-pane",name="PlayerListScroll",direction="vertical",vertical_scroll_policy="always",horizontal_scroll_policy="never"}
+    end;
+    clearElement(Z.gui.left.PlayerList.PlayerListScroll)
+    Z.gui.left.PlayerList.PlayerListScroll.style.maximal_height=200;
+    for G,r in pairs(game.connected_players) do 
+      if r.character then 
+        if r.tag=='[Jail]' or r.character.active==false then 
+          Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - Jail"}}
+          Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=50,g=50,b=50}
+          r.character.active=false;
+          r.tag='[Jail]'
+        end 
+      end;
+      if r.admin==true and r.tag~='[Jail]' then 
+        if r.name=="badgamernl" or r.name=="BADgamerNL" then 
+          Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - OWNER"}}
+          Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=170,g=0,b=0}
+          r.tag="[Owner]"
+        elseif r.name=="eissturm" or r.name=="PropangasEddy"
+          then Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - ADMIN"}}
+          Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=170,g=41,b=170}
+          r.tag="[Admin]"
+        elseif r.name=="Cooldude2606" then 
+          Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - DEV"}}
+          Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=179,g=125,b=46}r.tag="[Developer]"
+        elseif r.name=="arty714" then 
+          Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - CM"}}
+          Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=150,g=68,b=161}r.tag="[Com Mngr]"
+        else 
+          Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name," - MOD"}}
+          Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=233,g=63,b=233}r.tag="[Moderator]"
+        end 
+      end 
+    end;
+    for G,r in pairs(game.connected_players) do 
+      if r.admin==false and r.tag~='[Jail]' then 
+        if ticktominutes(r.online_time)>=timeForRegular then 
+          Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name}}
+          Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=24,g=172,b=188}r.tag="[Regular]"
+        elseif r.name=="explosivegaming" then 
+          for G=10,1,-1 do 
+            Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name..G,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name,G}}
+            Z.gui.left.PlayerList.PlayerListScroll[r.name..G].style.font_color={r=24,g=172,b=188}r.tag="[TEST]"
+          end 
+        else 
+          Z.gui.left.PlayerList.PlayerListScroll.add{type="label",name=r.name,style="caption_label_style",caption={"",ticktohour(r.online_time)," H - ",r.name}}
+          Z.gui.left.PlayerList.PlayerListScroll[r.name].style.font_color={r=255,g=159,b=27}r.tag="[Guest]"
+        end 
+      end 
+    end 
+  end 
+end;
+addButton(
+  'goto',
+  function(r,s)
+    local _=game.players[s.parent.name]
+    r.teleport(game.surfaces[_.surface.name].find_non_colliding_position("player",_.position,32,1))
+  end)
+addButton(
+  'bring',
+  function(r,s)
+    local _=game.players[s.parent.name]_.teleport(game.surfaces[r.surface.name].find_non_colliding_position("player",r.position,32,1))
+  end)
+addButton(
+  'jail',
+  function(r,s)
+    local _=game.players[s.parent.name]
+    if _.character then 
+      if _.character.active then 
+        _.character.active=false;
+        _.tag='[Jail]'
+        drawPlayerList()
+      else 
+        _.character.active=true;
+        _.tag='[Guest]'
+        drawPlayerList()
+      end 
+    end 
+  end)
+addButton(
+  'kill',
+  function(r,s)
+    local _=game.players[s.parent.name]
+    if _.character then 
+      _.character.die()
+    end 
+  end)
+function 
+  drawPlayerTable(r,s,K,J)
+  s.add{name='playerTable',type="table",colspan=5}
+  s.playerTable.style.minimal_width=500;
+  s.playerTable.style.maximal_width=500;
+  s.playerTable.style.horizontal_spacing=10;
+  s.playerTable.add{name="id",type="label",caption="Id		"}
+  s.playerTable.add{name="name",type="label",caption="Name		"}
+  if not K then 
+    s.playerTable.add{name="status",type="label",caption="Status		"}
+  end;
+  s.playerTable.add{name="online_time",type="label",caption="Online Time	"}
+  s.playerTable.add{name="rank",type="label",caption="Rank	"}
+  if K then 
+    s.playerTable.add{name="commands",type="label",caption="Commands"}
+  end;
+  for G,_ in pairs(game.players) do 
+    local a0=true;
+    for d,a1 in pairs(J) do 
+      if a1=='admin' then 
+        if _.admin==false then 
+          a0=false;
+          break 
+        end 
+      elseif a1=='online' then 
+        if _.connected==false 
+          then a0=false;
+          break 
+        end 
+      elseif a1=='offline' then 
+        if _.connected==true then 
+          a0=false;
+          break 
+        end 
+      elseif type(a1)=='number' then 
+        if a1>ticktominutes(_.online_time) then 
+          a0=false;
+          break 
+        end 
+      elseif type(a1)=='string' then 
+        if _.name:lower():find(a1:lower())==nil then 
+          a0=false;
+          break
+        end
+      end 
+    end;
+    if a0==true and r.name~=_.name then 
+      if s.playerTable[_.name]==nil then 
+        s.playerTable.add{name=G.."id",type="label",caption=G}
+        s.playerTable.add{name=_.name..'_name',type="label",caption=_.name}
+        if not K then 
+          if _.connected==true then 
+            s.playerTable.add{name=_.name.."Status",type="label",caption="ONLINE"}
+          else s.playerTable.add{name=_.name.."Status",type="label",caption="OFFLINE"}
+          end 
+        end;
+        s.playerTable.add{name=_.name.."Online_Time",type="label",caption=ticktohour(_.online_time)..'H '..ticktominutes(_.online_time)-60*ticktohour(_.online_time)..'M'}
+        s.playerTable.add{name=_.name.."Rank",type="label",caption=_.tag}
+        if K then 
+          s.playerTable.add{name=_.name,type="flow"}
+          drawButton(s.playerTable[_.name],'goto','Tp','Goto to the players location')
+          drawButton(s.playerTable[_.name],'bring','Br','Bring a player to your location')
+          if _.tag=='[Owner]'or _.tag=='[Developer]'or _.tag=='[Com Mngr]'then 
+          else 
+            drawButton(
+              s.playerTable[_.name],
+              'jail',
+              'Ja',
+              'Jail/Unjail a player'
+            )
+            drawButton(
+              s.playerTable[_.name],
+              'kill',
+              'Ki',
+              'Kill this player'
+            )
+          end 
+        end 
+      end 
+    end 
+  end 
+end;
+addFrame('Readme')
+addTab(
+  'Readme',
+  'Rules',
+  'The rules of the server',
+  function(r,s)
+    local a2={
+      "Hacking/cheating, exploiting and abusing bugs is not allowed.",
+      "Do not disrespect any player in the server (This includes staff).",
+      "Do not spam, this includes stuff such as chat spam, item spam, chest spam etc.",
+      "Do not laydown concrete with bots without permission.",
+      "Do not use active provider chests without permission.",
+      "Do not remove/move major parts of the factory without permission.",
+      "Do not walk in a random direction for no reason(to save map size).",
+      "Do not remove stuff just because you don't like it, tell people first.",
+      "Do not make train roundabouts.","Trains are Left Hand Drive (LHD) only.",
+      "Do not complain about lag, low fps and low ups or other things like that.",
+      "Do not ask for rank.","Use common sense and what an admin says goes."}
+    for G,a3 in pairs(a2) do 
+      s.add{name=G,type="label",caption={"",G,". ",a3}}
+    end 
+  end)
+addTab(
+  'Readme',
+  'Server Info',
+  'Info about the server',
+  function(r,s)
+    s.add{name=1,type="label",caption={"","Discord voice and chat server:"}}
+    s.add{name=2,type='textfield',text='https://discord.gg/RPCxzgt'}.style.minimal_width=400;
+    s.add{name=3,type="label",caption={"","Our forum:"}}
+    s.add{name=4,type='textfield',text='https://explosivegaming.nl'}.style.minimal_width=400;
+    s.add{name=5,type="label",caption={"","Steam:"}}
+    s.add{name=6,type='textfield',text='http://steamcommunity.com/groups/tntexplosivegaming'}.style.minimal_width=400 
+  end)
+addTab(
+  'Readme',
+  'How to chat',
+  'Just in case you dont know how to chat',
+  function(r,s)
+    local a4={
+      "Chatting for new players can be difficult because it’s different than other games!",
+      "It’s very simple, the button you need to press is the “GRAVE/TILDE key”",
+      "it’s located under the “ESC key”. If you would like to change the key go to your",
+      "controls tab in options. The key you need to change is “Toggle Lua console”",
+      "it’s located in the second column 2nd from bottom."}
+    for G,a5 in pairs(a4) do 
+      s.add{name=G,type="label",caption={"",a5}}end end)addTab('Readme','Admins','List of all the people who can ban you :P',function(r,s)local a6={"This list contains all the people that are admin in this world. Do you want to become","an admin dont ask for it! an admin will see what you've made and the time you put","in the server."}for G,a5 in pairs(a6)do s.add{name=G,type="label",caption={"",a5}}end;drawPlayerTable(r,s,false,{'admin'})end)addTab('Readme','Players','List of all the people who have been on the server',function(r,s)local a7={"These are the players who have supported us in the making of this factory. Without","you the player we wouldn't have been as far as we are now."}for G,a5 in pairs(a7)do s.add{name=G,type="label",caption={"",a5}}end;s.add{name='filterTable',type='table',colspan=3}s.filterTable.add{name='name_label',type='label',caption='Name'}s.filterTable.add{name='status_label',type='label',caption='Online?'}s.filterTable.add{name='hours_label',type='label',caption='Online Time (minutes)'}s.filterTable.add{name='name_input',type='textfield'}s.filterTable.add{name='status_input',type='textfield'}s.filterTable.add{name='hours_input',type='textfield'}drawPlayerTable(r,s,false,{})end)addFrame('Admin')addButton('btn_toolbar_automessage',function()autoMessage()end)addButton('revive_dead_entitys',function(r,s)for a8,e in pairs(game.surfaces[1].find_entities_filtered({type="entity-ghost"}))do e.revive()end end)addButton('revive_dead_entitys_range',function(r,s)if tonumber(s.parent.range.text)then local a9=tonumber(s.parent.range.text)for a8,e in pairs(game.surfaces[1].find_entities_filtered({area={{r.position.x-a9,r.position.y-a9},{r.position.x+a9,r.position.y+a9}},type="entity-ghost"}))do e.revive()end end end)addButton('remove_biters',function(r,s)for a8,e in pairs(game.surfaces[1].find_entities_filtered({force='enemy'}))do e.destroy()end end)addButton('tp_all',function(r,s)for G,_ in pairs(game.connected_players)do local aa=game.surfaces[r.surface.name].find_non_colliding_position("player",r.position,32,1)if _~=r then _.teleport(aa)end end end)addButton('toggle_cheat',function(r,s)r.cheat_mode=not r.cheat_mode end)addButton('add_dev_items',function(r,s)r.insert{name="deconstruction-planner",count=1}r.insert{name="blueprint-book",count=1}r.insert{name="blueprint",count=20}end)addButton("btn_Modifier_apply",function(r,s)local ab={"manual_mining_speed_modifier","manual_crafting_speed_modifier","character_running_speed_modifier","worker_robots_speed_modifier","worker_robots_storage_bonus","character_build_distance_bonus","character_item_drop_distance_bonus","character_reach_distance_bonus","character_resource_reach_distance_bonus","character_item_pickup_distance_bonus","character_loot_pickup_distance_bonus"}for G,ac in pairs(ab)do local ad=tonumber(s.parent.parent.modifierTable[ac.."_input"].text:match("[%d]+[.%d+]"))if ad~=nil then if ad>=0 and ad<50 and ad~=r.force[ac]then r.force[ac]=ad;r.print(ac.." changed to number: "..tostring(ad))elseif ad==r.force[ac]then r.print(ac.." Did not change")else r.print(ac.." needs to be a higher number or it contains an letter")end end end end)addTab('Admin','Commands','Random useful commands',function(r,s)drawButton(s,'btn_toolbar_automessage','Auto Message','Send the auto message to all online players')drawButton(s,'add_dev_items','Get Blueprints','Get all the blueprints')drawButton(s,'revive_dead_entitys','Revive All Entitys','Brings all dead machines back to life')drawButton(s,'revive_dead_entitys_range','Revive Entitys','Brings all dead machines back to life in a range')s.add{type='textfield',name='range',text='Range'}drawButton(s,'remove_biters','Kill Biters','Removes all biters in map')drawButton(s,'tp_all','TP All Here','Brings all players to you')drawButton(s,'toggle_cheat','Toggle Cheat Mode','Toggle your cheat mode')end)addTab('Admin','Modifiers','Edit in game modifiers',function(r,s)local ab={"manual_mining_speed_modifier","manual_crafting_speed_modifier","character_running_speed_modifier","worker_robots_speed_modifier","worker_robots_storage_bonus","character_build_distance_bonus","character_item_drop_distance_bonus","character_reach_distance_bonus","character_resource_reach_distance_bonus","character_item_pickup_distance_bonus","character_loot_pickup_distance_bonus"}s.add{type="flow",name="flowNavigation",direction="horizontal"}s.add{name="modifierTable",type="table",colspan=3}s.modifierTable.add{name="name",type="label",caption="name"}s.modifierTable.add{name="input",type="label",caption="input"}s.modifierTable.add{name="current",type="label",caption="current"}for G,ac in pairs(ab)do s.modifierTable.add{name=ac,type="label",caption=ac}s.modifierTable.add{name=ac.."_input",type="textfield",caption="inputTextField"}s.modifierTable.add{name=ac.."_current",type="label",caption=tostring(r.force[ac])}end;drawButton(s.flowNavigation,"btn_Modifier_apply","Apply","Apply the new values to the game")end)addTab('Admin','Player List','Send a message to all players',function(r,s)s.add{name='filterTable',type='table',colspan=2}s.filterTable.add{name='name_label',type='label',caption='Name'}s.filterTable.add{name='hours_label',type='label',caption='Online Time (minutes)'}s.filterTable.add{name='name_input',type='textfield'}s.filterTable.add{name='hours_input',type='textfield'}drawPlayerTable(r,s,true,{'online'})end)

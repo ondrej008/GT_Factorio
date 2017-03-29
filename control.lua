@@ -12,6 +12,92 @@ CHUNK_SIZE=32;
 TADY JSOU EVENTY
 TADY JSOU EVENTY
 ]]
+function 
+  drawPlayerTable(r,s,K,J)
+  s.add{name='playerTable',type="table",colspan=5}
+  s.playerTable.style.minimal_width=500;
+  s.playerTable.style.maximal_width=500;
+  s.playerTable.style.horizontal_spacing=10;
+  s.playerTable.add{name="id",type="label",caption="Id		"}
+  s.playerTable.add{name="name",type="label",caption="Name		"}
+  if not K then 
+    s.playerTable.add{name="status",type="label",caption="Status		"}
+  end;
+  s.playerTable.add{name="online_time",type="label",caption="Online Time	"}
+  s.playerTable.add{name="rank",type="label",caption="Rank	"}
+  if K then 
+    s.playerTable.add{name="commands",type="label",caption="Commands"}
+  end;
+  for G,_ in pairs(game.players) do 
+    local a0=true;
+    for d,a1 in pairs(J) do 
+      if a1=='admin' then 
+        if _.admin==false then 
+          a0=false;
+          break 
+        end 
+      elseif a1=='online' then 
+        if _.connected==false 
+          then a0=false;
+          break 
+        end 
+      elseif a1=='offline' then 
+        if _.connected==true then 
+          a0=false;
+          break 
+        end 
+      elseif type(a1)=='number' then 
+        if a1>ticktominutes(_.online_time) then 
+          a0=false;
+          break 
+        end 
+      elseif type(a1)=='string' then 
+        if _.name:lower():find(a1:lower())==nil then 
+          a0=false;
+          break
+        end
+      end 
+    end;
+    if a0==true and r.name~=_.name then 
+      if s.playerTable[_.name]==nil then 
+        s.playerTable.add{name=G.."id",type="label",caption=G}
+        s.playerTable.add{name=_.name..'_name',type="label",caption=_.name}
+        if not K then 
+          if _.connected==true then 
+            s.playerTable.add{name=_.name.."Status",type="label",caption="ONLINE"}
+          else s.playerTable.add{name=_.name.."Status",type="label",caption="OFFLINE"}
+          end 
+        end;
+        s.playerTable.add{
+          name=_.name.."Online_Time",
+          type="label",
+          caption=ticktohour(_.online_time)..'H '..ticktominutes(_.online_time)-60*ticktohour(_.online_time)..'M'
+        }
+        s.playerTable.add{name=_.name.."Rank",type="label",caption=_.tag}
+        if K then 
+          s.playerTable.add{name=_.name,type="flow"}
+          drawButton(s.playerTable[_.name],'goto','Tp','Goto to the players location')
+          drawButton(s.playerTable[_.name],'bring','Br','Bring a player to your location')
+          if _.tag=='[Owner]'or _.tag=='[Developer]'or _.tag=='[Com Mngr]'then 
+          else 
+            drawButton(
+              s.playerTable[_.name],
+              'jail',
+              'Ja',
+              'Jail/Unjail a player'
+            )
+            drawButton(
+              s.playerTable[_.name],
+              'kill',
+              'Ki',
+              'Kill this player'
+            )
+          end 
+        end 
+      end 
+    end 
+  end 
+end;
 script.on_event(defines.events.on_player_created, function(event)
   local player = game.players[event.player_index]
   player.insert{name="iron-plate", count=8}
@@ -212,6 +298,15 @@ function
 end;
 local function f(b,g,h,i,j)
   a(b,{{g,h},{g+i,h+j}})
+end;
+local function a(b,c)
+  if b.find_entities_filtered{area=c,type="decorative"} then 
+    for d,e in pairs(b.find_entities_filtered{area=c,type="decorative"}) do 
+      if e.name~="red-bottleneck"and e.name~="yellow-bottleneck"and e.name~="green-bottleneck" then 
+        e.destroy()
+      end 
+    end 
+  end
 end;
 local function k()
   local b=game.surfaces["nauvis"]

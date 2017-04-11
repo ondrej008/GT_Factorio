@@ -30,6 +30,9 @@ script.on_event(defines.events.on_player_respawned, function(event)
   local player = game.players[event.player_index]
   player.insert{name="pistol", count=1}
   player.insert{name="firearm-magazine", count=10}
+  player.insert{name="iron-plate", count=10}
+  player.insert{name="burner-mining-drill", count = 1}
+  player.insert{name="stone-furnace", count = 1}
 end)
 
 script.on_event(defines.events.on_rocket_launched, function(event)
